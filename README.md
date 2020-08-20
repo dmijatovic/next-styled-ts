@@ -33,7 +33,7 @@ npm i -D babel-plugin-styled-components
 
 ## Enable absolute imports
 
-Add baseUrl definition to point to root of the project.
+Add baseUrl definition in tsconfig.json to point to the root of the project.
 
 ```tsconfig.json
 {
