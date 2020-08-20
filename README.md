@@ -1,30 +1,83 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NextJS with typescript and styled components
 
-## Getting Started
+This is manual setup of nextjs with typescript and styled components. It based on [this article](https://dev.to/rffaguiar/nextjs-typescript-styled-components-1i3m).
 
-First, run the development server:
+## Install types
 
 ```bash
-npm run dev
-# or
-yarn dev
+# install typescript and types
+npm i -D typescript @types/react @types/node
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Change file extension to tsx
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Change file extension to tsx on all react files.
+Create empty tsconfig.json
 
-## Learn More
+```bash
+# create empty file
+touch tsconfig.json
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Instal styled-components
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# install styled component
+npm i -s styled-components @types/styled-components
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# install babel plugin for consitent naming
+npm i -D babel-plugin-styled-components
 
-## Deploy on Vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Enable absolute imports
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Add baseUrl definition to point to root of the project.
+
+```tsconfig.json
+{
+ "baseUrl": "."
+}
+```
+
+## Start next.js
+
+After starting nextjs in dev mode, it will detect typescript and update tsconfig.json
+
+## Enable server side style loading
+
+Create _document.tsx file and past the code
+
+```javascript
+import Document from 'next/document'
+import { ServerStyleSheet } from 'styled-components'
+
+export default class MyDocument extends Document {
+  static async getInitialProps(ctx) {
+    const sheet = new ServerStyleSheet()
+    const originalRenderPage = ctx.renderPage
+
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
+        })
+
+      const initialProps = await Document.getInitialProps(ctx)
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      }
+    } finally {
+      sheet.seal()
+    }
+  }
+}
+```
