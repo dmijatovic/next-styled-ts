@@ -81,3 +81,35 @@ export default class MyDocument extends Document {
   }
 }
 ```
+
+## Extend styled-components DefaultTheme type with custom interface
+
+Based on the [documentation from here](https://styled-components.com/docs/api)
+
+Create styled.d.ts file and change default theme types.
+
+```ts
+// import original module declarations
+import 'styled-components'
+
+// and extend them!
+declare module 'styled-components' {
+  export interface DefaultTheme {
+    fontFamily:string,
+    color:{
+      primary:{
+        main:string
+      },
+      secondary:{
+        main:string
+      },
+      error:{
+        main:string
+      },
+      background:{
+        default:string
+      }
+    }
+  }
+}
+```

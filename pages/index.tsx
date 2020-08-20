@@ -8,7 +8,8 @@ import Title from 'components/layout/Title'
 import Main from 'components/layout/Main'
 import Footer from 'components/layout/Footer'
 
-export default function Home() {
+export default function Home(props){
+  // console.log("home props: ", props)
   return (
     <>
     <Head>

@@ -14,8 +14,8 @@ export default styled.a`
   :hover,
   :focus,
   :active {
-    color: #0070f3;
-    border-color: #0070f3;
+    color: ${props=>props.theme.color.primary.main};
+    border-color: ${props=>props.theme.color.primary.main};
   }
 
   h3 {
